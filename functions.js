@@ -74,7 +74,7 @@ function goBack() {
   window.history.back();
 }
 
-collapseAll('passage-selector');
+collapseAll('song-selector');
 document.getElementById("search-field").focus();
 
 function collapseAll(id) {

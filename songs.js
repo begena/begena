@@ -1,8 +1,20 @@
+if ("serviceWorker" in navigator) {
+  if (navigator.serviceWorker.controller) {
+    console.log("[PWA Builder] active service worker found, no need to register");
+  } else {
+    navigator.serviceWorker
+      .register("pwabuilder-sw.js", {
+        scope: "./"
+      })
+      .then(function (reg) {
+        console.log("[PWA Builder] Service worker has been registered for scope: " + reg.scope);
+      });
+  }
+}
 
 var app = angular.module('songsApp', []);
 
 app.filter("filterall",function($filter) {
-
   return function(arr,t){ 
     (t?t.split(/,+/):[]).forEach(function(v){ 
       arr = $filter('filter')(arr,v); 
@@ -38,8 +50,6 @@ app.controller('songCtrl', function($scope, $http) {
       hash = hashes[i].split('=');
       vars[hash[0]] = hash[1];
     }
-    console.log(vars);
-    console.log(list);
     
     for (var j = 0; j < list.length; j++) {
       if(list[j]["singer"] == vars["s"]) {
@@ -47,7 +57,6 @@ app.controller('songCtrl', function($scope, $http) {
           if(list[j]["songs"][k]["t"] == vars["t"]) {
             $scope.singer = list[j]["singer"];
             $scope.song = list[j]["songs"][k];
-            console.log($scope.song);
           }
         }
       }
@@ -62,7 +71,6 @@ app.controller('songsCtrl', function($scope, $http) {
 $http.get("data2.json").then(function (response) {
   $scope.list = Object.values(response.data)[0];
   list = $scope.list;
-  console.log($scope.list);
 });
 
 });
